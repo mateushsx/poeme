@@ -3,6 +3,7 @@
 :root {
   --background: #0f0f0f;
   --text: #fff;
+  --primary: #3183ff;
 }
 
 * {
@@ -13,5 +14,5 @@
 
 body {
   font-family: 'Open Sans', sans-serif;
-  /* font-family: "Edu AU VIC WA NT Hand", cursive; */
+  background-color: var(--background);
 }
