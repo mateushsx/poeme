@@ -3,6 +3,7 @@ import { getSession } from 'next-auth/react';
 import Head from 'next/head';
 
 import styles from './styles.module.css';
+import { Textarea } from '@/components/textarea';
 
 export default function Dashboard() {
   return (
@@ -11,8 +12,26 @@ export default function Dashboard() {
         <title>Poeme | Dashboard</title>
       </Head>
 
-      <main>
-        <h1>Dashboard</h1>
+      <main className={styles.main}>
+        <section className={styles.content}>
+          <div className={styles.contentForm}>
+            <h1 className={styles.title}>Qual verso deseja anotar?</h1>
+
+            <form className={styles.form}>
+              <Textarea placeholder="Escreva seu verso..." />
+
+              <div className={styles.checkboxContent}>
+                <input type="checkbox" className={styles.checkbox} />
+
+                <label>Deixar verso publico?</label>
+              </div>
+
+              <button type="submit" className={styles.button}>
+                Anotar
+              </button>
+            </form>
+          </div>
+        </section>
       </main>
     </div>
   );
