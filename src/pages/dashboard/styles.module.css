@@ -2,19 +2,38 @@
   width: 100%;
 }
 
-.content {
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 40px;
+}
+
+.content,
+.contentBottom {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   width: 100%;
   height: 100%;
 }
 
-.contentForm {
+.contentForm,
+.contentList {
   width: 100%;
   max-width: 1024px;
   padding: 0px 20px;
   margin-top: 60px;
+}
+
+.contentList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .title {
@@ -52,4 +71,67 @@
   background-color: var(--primary);
   padding: 10px 0;
   cursor: pointer;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  max-width: 1024px;
+  padding: 5px 10px;
+  border: 1px solid #fff;
+  border-radius: 10px;
+}
+
+.card:hover {
+  border: 1px solid var(--primary);
+}
+
+.cardLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tagContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tag {
+  color: var(--text);
+  background-color: #0084ff;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.shareButton {
+  padding: 2px 4px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.paragraph {
+  color: var(--text);
+  font-size: 18px;
+}
+
+.buttonDelete {
+  width: 100%;
+  border: 0;
+  border-radius: 5px;
+  font-size: 20px;
+  color: var(--text);
+  padding: 2px;
+  cursor: pointer;
+  color: red;
+  background: transparent;
+}
+.buttonDelete:hover {
+  color: rgb(255, 44, 44);
 }

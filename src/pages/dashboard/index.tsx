@@ -1,9 +1,11 @@
+import { Forward, Trash } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';
 
-import styles from './styles.module.css';
 import { Textarea } from '@/components/textarea';
+
+import styles from './styles.module.css';
 
 export default function Dashboard() {
   return (
@@ -30,6 +32,35 @@ export default function Dashboard() {
                 Anotar
               </button>
             </form>
+          </div>
+        </section>
+
+        <section className={styles.contentBottom}>
+          <h1 className={styles.title}>Versos anotados</h1>
+
+          <div className={styles.contentList}>
+            <article className={styles.card}>
+              <div className={styles.cardLeft}>
+                <div className={styles.tagContainer}>
+                  <label className={styles.tag}>PÚBLICO</label>
+
+                  <button className={styles.shareButton}>
+                    <Forward color="#0084ff" strokeWidth={3} />
+                  </button>
+                </div>
+
+                <p className={styles.paragraph}>
+                  Seria mais fácil eu terminar de contar as estrelas do céu do
+                  que tentar quantificar o meu amor por você.
+                </p>
+              </div>
+
+              <div className={styles.cardRight}>
+                <button className={styles.buttonDelete}>
+                  <Trash strokeWidth={2} size={32} />
+                </button>
+              </div>
+            </article>
           </div>
         </section>
       </main>
