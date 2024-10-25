@@ -53,10 +53,13 @@ export default function Dashboard({ user }: IDashboardProps) {
         createdAt: new Date(),
       });
 
+      toast.success('Verso adicionado com sucesso!');
+
       setVerse('');
       setIsPublicVerse(false);
     } catch (error) {
       console.log(error);
+      toast.error('Erro ao adicionar o verso!');
     }
   };
 
@@ -74,22 +77,18 @@ export default function Dashboard({ user }: IDashboardProps) {
   };
 
   useEffect(() => {
-    async function getVerses() {
-      const versesQuery = query(
-        versesCollection,
-        orderBy('createdAt', 'asc'),
-        where('user', '==', user.email)
-      );
+    const versesQuery = query(
+      versesCollection,
+      orderBy('createdAt', 'asc'),
+      where('user', '==', user.email)
+    );
 
-      onSnapshot(versesQuery, (snapshot) => {
-        const verses = snapshot.docs.map((doc) => doc.data()) as TVerse[];
+    onSnapshot(versesQuery, (snapshot) => {
+      const verses = snapshot.docs.map((doc) => doc.data()) as TVerse[];
 
-        setVerses(verses);
-        console.log(verses);
-      });
-    }
-
-    getVerses();
+      setVerses(verses);
+      console.log(verses);
+    });
   }, [user]);
 
   return (
