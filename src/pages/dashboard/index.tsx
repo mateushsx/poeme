@@ -59,6 +59,16 @@ export default function Dashboard({ user }: IDashboardProps) {
     }
   };
 
+  const handleShare = async (id: string) => {
+    const BASE_URL = process.env.NEXT_PUBLIC_URL;
+
+    try {
+      await navigator.clipboard.writeText(`${BASE_URL}/verse/${id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     async function getVerses() {
       const versesQuery = query(
@@ -126,7 +136,10 @@ export default function Dashboard({ user }: IDashboardProps) {
                       <div className={styles.tagContainer}>
                         <label className={styles.tag}>PÚBLICO</label>
 
-                        <button className={styles.shareButton}>
+                        <button
+                          className={styles.shareButton}
+                          onClick={() => handleShare(verse.id)}
+                        >
                           <Forward color="#0084ff" strokeWidth={3} />
                         </button>
                       </div>
