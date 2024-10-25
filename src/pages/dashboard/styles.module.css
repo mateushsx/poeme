@@ -121,6 +121,11 @@
   font-size: 18px;
 }
 
+.link {
+  color: var(--primary);
+  text-decoration: none;
+}
+
 .buttonDelete {
   width: 100%;
   border: 0;

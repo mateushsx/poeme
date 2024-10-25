@@ -10,13 +10,14 @@ import { Forward, Trash } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 
 import { Textarea } from '@/components/textarea';
 import { versesCollection } from '@/services/collections';
 import { TVerse } from '@/types';
 
 import styles from './styles.module.css';
+import Link from 'next/link';
 
 interface IDashboardProps {
   user: {
@@ -120,17 +121,23 @@ export default function Dashboard({ user }: IDashboardProps) {
             {verses.map((verse) => (
               <article className={styles.card} key={verse.id}>
                 <div className={styles.cardLeft}>
-                  {verse.isPublic && (
-                    <div className={styles.tagContainer}>
-                      <label className={styles.tag}>PÚBLICO</label>
+                  {verse.isPublic ? (
+                    <Fragment>
+                      <div className={styles.tagContainer}>
+                        <label className={styles.tag}>PÚBLICO</label>
 
-                      <button className={styles.shareButton}>
-                        <Forward color="#0084ff" strokeWidth={3} />
-                      </button>
-                    </div>
+                        <button className={styles.shareButton}>
+                          <Forward color="#0084ff" strokeWidth={3} />
+                        </button>
+                      </div>
+
+                      <Link href={`/verse/${verse.id}`} className={styles.link}>
+                        <p className={styles.paragraph}>{verse.text}</p>
+                      </Link>
+                    </Fragment>
+                  ) : (
+                    <p className={styles.paragraph}>{verse.text}</p>
                   )}
-
-                  <p className={styles.paragraph}>{verse.text}</p>
                 </div>
 
                 <div className={styles.cardRight}>
