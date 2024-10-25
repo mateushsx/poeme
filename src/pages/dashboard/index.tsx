@@ -1,10 +1,11 @@
 import {
+  deleteDoc,
   doc,
-  query,
-  where,
-  setDoc,
-  orderBy,
   onSnapshot,
+  orderBy,
+  query,
+  setDoc,
+  where,
 } from 'firebase/firestore';
 import { Forward, Trash } from 'lucide-react';
 import { GetServerSideProps } from 'next';
@@ -73,6 +74,24 @@ export default function Dashboard({ user }: IDashboardProps) {
     } catch (error) {
       console.log(error);
       toast.error('Erro ao compartilhar!');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const confirmDelete = confirm(
+        'Tem certeza que deseja deletar este verso?'
+      );
+
+      if (confirmDelete) {
+        const docRef = doc(versesCollection, id);
+        await deleteDoc(docRef);
+
+        toast.success('Verso deletado com sucesso!');
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('Erro ao deletar o verso!');
     }
   };
 
@@ -157,7 +176,10 @@ export default function Dashboard({ user }: IDashboardProps) {
                 </div>
 
                 <div className={styles.cardRight}>
-                  <button className={styles.buttonDelete}>
+                  <button
+                    className={styles.buttonDelete}
+                    onClick={() => handleDelete(verse.id)}
+                  >
                     <Trash strokeWidth={2} size={32} />
                   </button>
                 </div>
