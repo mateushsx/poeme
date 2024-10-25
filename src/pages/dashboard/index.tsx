@@ -1,12 +1,20 @@
-import { addDoc } from 'firebase/firestore';
+import {
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  setDoc,
+  where,
+} from 'firebase/firestore';
 import { Forward, Trash } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { Textarea } from '@/components/textarea';
 import { versesCollection } from '@/services/collections';
+import { TVerse } from '@/types';
 
 import styles from './styles.module.css';
 
@@ -18,6 +26,7 @@ interface IDashboardProps {
 
 export default function Dashboard({ user }: IDashboardProps) {
   const [verse, setVerse] = useState('');
+  const [verses, setVerses] = useState<TVerse[]>([]);
   const [isPublicVerse, setIsPublicVerse] = useState(false);
 
   const handleChangeVerse = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -32,8 +41,11 @@ export default function Dashboard({ user }: IDashboardProps) {
     event.preventDefault();
 
     try {
-      await addDoc(versesCollection, {
-        verse,
+      const docRef = doc(versesCollection);
+
+      await setDoc(docRef, {
+        id: docRef.id,
+        text: verse,
         isPublic: isPublicVerse,
         user: user.email,
         createdAt: new Date(),
@@ -45,6 +57,25 @@ export default function Dashboard({ user }: IDashboardProps) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    async function getVerses() {
+      const versesQuery = query(
+        versesCollection,
+        orderBy('createdAt', 'asc'),
+        where('user', '==', user.email)
+      );
+
+      onSnapshot(versesQuery, (snapshot) => {
+        const verses = snapshot.docs.map((doc) => doc.data()) as TVerse[];
+
+        setVerses(verses);
+        console.log(verses);
+      });
+    }
+
+    getVerses();
+  }, [user]);
 
   return (
     <div className={styles.container}>
@@ -86,28 +117,29 @@ export default function Dashboard({ user }: IDashboardProps) {
           <h1 className={styles.title}>Versos anotados</h1>
 
           <div className={styles.contentList}>
-            <article className={styles.card}>
-              <div className={styles.cardLeft}>
-                <div className={styles.tagContainer}>
-                  <label className={styles.tag}>PÚBLICO</label>
+            {verses.map((verse) => (
+              <article className={styles.card} key={verse.id}>
+                <div className={styles.cardLeft}>
+                  {verse.isPublic && (
+                    <div className={styles.tagContainer}>
+                      <label className={styles.tag}>PÚBLICO</label>
 
-                  <button className={styles.shareButton}>
-                    <Forward color="#0084ff" strokeWidth={3} />
-                  </button>
+                      <button className={styles.shareButton}>
+                        <Forward color="#0084ff" strokeWidth={3} />
+                      </button>
+                    </div>
+                  )}
+
+                  <p className={styles.paragraph}>{verse.text}</p>
                 </div>
 
-                <p className={styles.paragraph}>
-                  Seria mais fácil eu terminar de contar as estrelas do céu do
-                  que tentar quantificar o meu amor por você.
-                </p>
-              </div>
-
-              <div className={styles.cardRight}>
-                <button className={styles.buttonDelete}>
-                  <Trash strokeWidth={2} size={32} />
-                </button>
-              </div>
-            </article>
+                <div className={styles.cardRight}>
+                  <button className={styles.buttonDelete}>
+                    <Trash strokeWidth={2} size={32} />
+                  </button>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
       </main>
@@ -126,8 +158,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       },
     };
   }
-
-  session.user?.email;
 
   return {
     props: {
