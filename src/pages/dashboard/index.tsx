@@ -1,23 +1,24 @@
 import {
   doc,
-  onSnapshot,
-  orderBy,
   query,
-  setDoc,
   where,
+  setDoc,
+  orderBy,
+  onSnapshot,
 } from 'firebase/firestore';
 import { Forward, Trash } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';
+import Link from 'next/link';
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { Textarea } from '@/components/textarea';
 import { versesCollection } from '@/services/collections';
 import { TVerse } from '@/types';
 
 import styles from './styles.module.css';
-import Link from 'next/link';
 
 interface IDashboardProps {
   user: {
@@ -64,8 +65,11 @@ export default function Dashboard({ user }: IDashboardProps) {
 
     try {
       await navigator.clipboard.writeText(`${BASE_URL}/verse/${id}`);
+
+      toast.success('Link copiado com sucesso!');
     } catch (error) {
       console.log(error);
+      toast.error('Erro ao compartilhar!');
     }
   };
 
